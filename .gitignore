@@ -363,3 +363,6 @@ ASALocalRun/
 *.out
 *.app
 
+##############
+
+*.vcxproj.filters
