@@ -31,4 +31,9 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnEnChangeEditOrigin();
+	afx_msg void OnEnChangeEditEncode();
+	afx_msg void OnEnUpdateEditEncode();
+	afx_msg void OnEnUpdateEditOrigin();
 };

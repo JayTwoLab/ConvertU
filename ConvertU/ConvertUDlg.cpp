@@ -65,6 +65,10 @@ BEGIN_MESSAGE_MAP(CConvertUDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_EN_CHANGE(IDC_EDIT_ORIGIN, &CConvertUDlg::OnEnChangeEditOrigin)
+	ON_EN_CHANGE(IDC_EDIT_ENCODE, &CConvertUDlg::OnEnChangeEditEncode)
+	ON_EN_UPDATE(IDC_EDIT_ENCODE, &CConvertUDlg::OnEnUpdateEditEncode)
+	ON_EN_UPDATE(IDC_EDIT_ORIGIN, &CConvertUDlg::OnEnUpdateEditOrigin)
 END_MESSAGE_MAP()
 
 
@@ -155,3 +159,66 @@ HCURSOR CConvertUDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+void CConvertUDlg::OnEnChangeEditOrigin()
+{
+	if (this->GetFocus() != GetDlgItem(IDC_EDIT_ORIGIN))
+	{
+		// TRACE(_T(" current focus is not origin edit \n"));
+		return;
+	}
+
+	CString strOrigin;
+	GetDlgItem(IDC_EDIT_ORIGIN)->GetWindowText(strOrigin);
+
+	if (strOrigin.GetLength() >= MAX_URL)
+	{
+		strOrigin = strOrigin.GetBuffer(MAX_URL);
+	}
+
+	// encode from 'orign' to 'encode'
+	CString strResult = EncodeURL(strOrigin);
+	GetDlgItem(IDC_EDIT_ENCODE)->SetWindowText(strResult);
+}
+
+void CConvertUDlg::OnEnChangeEditEncode()
+{
+	if (this->GetFocus() != GetDlgItem(IDC_EDIT_ENCODE))
+	{
+		// TRACE(_T(" current focus is not origin edit \n"));
+		return;
+	}
+
+	CString strEncode;
+	GetDlgItem(IDC_EDIT_ENCODE)->GetWindowText(strEncode);
+
+	if (strEncode.GetLength() >= MAX_URL)
+	{
+		strEncode = strEncode.GetBuffer(MAX_URL);
+	}
+
+	// decode from 'encode' to 'origin'
+	CString strResult = DecodeURL(strEncode); 
+	GetDlgItem(IDC_EDIT_ORIGIN)->SetWindowText(strResult);
+}
+
+
+void CConvertUDlg::OnEnUpdateEditEncode()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialogEx::OnInitDialog()
+	// function to send the EM_SETEVENTMASK message to the control
+	// with the ENM_UPDATE flag ORed into the lParam mask.
+
+	// TODO:  Add your control notification handler code here
+}
+
+
+void CConvertUDlg::OnEnUpdateEditOrigin()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialogEx::OnInitDialog()
+	// function to send the EM_SETEVENTMASK message to the control
+	// with the ENM_UPDATE flag ORed into the lParam mask.
+
+	// TODO:  Add your control notification handler code here
+}

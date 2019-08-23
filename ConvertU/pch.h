@@ -10,4 +10,28 @@
 // add headers that you want to pre-compile here
 #include "framework.h"
 
+#include <wininet.h>
+
+#include <cstddef>
+
+#include <cctype>
+#include <iomanip>
+#include <sstream>
+#include <string>
+#include <type_traits>
+#include <iostream>
+#include <iterator>
+#include <vector>
+
+#ifndef MAX_URL
+ #define MAX_URL 2083
+#endif
+
+CString EncodeURL(CString url);
+CString DecodeURL(CString url);
+
+std::string url_encode(const std::string& value);
+char from_hex(char ch);
+std::string url_decode(std::string text);
+
 #endif //PCH_H
