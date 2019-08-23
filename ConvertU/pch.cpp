@@ -22,9 +22,11 @@ CString EncodeURL(CString url)
 	srcString = url.GetBuffer(url.GetLength());
 #endif
 
-	std::string encodedString = url_encode(srcString);
+	// 한글 인코딩
+	char* szHangul = AnsiToUtf8(srcString.c_str());
 
-	// TODO: 한글 인코딩
+	// URL 인코딩 
+	std::string encodedString = url_encode( std::string(szHangul) );
 
 #ifdef _UNICODE
 	{
@@ -60,9 +62,12 @@ CString DecodeURL(CString url)
 	srcString = url.GetBuffer(url.GetLength());
 #endif
 
+	// URL 디코딩
 	std::string encodedString = url_decode(srcString);
 
-	// TODO: 한글 디코딩
+	// 한글 디코딩
+	char* szHangul = Utf8ToAnsi( encodedString.c_str() );
+	encodedString = szHangul;
 
 #ifdef _UNICODE
 	{
@@ -89,10 +94,20 @@ std::string url_encode(const std::string& value)
 
 	for (std::string::const_iterator i = value.begin(), n = value.end(); i != n; ++i) 
 	{
-		std::string::value_type c = (*i);
+		// std::string::value_type c = (*i);
+		unsigned char c = (*i);
+
+		unsigned char c1 = '-';
+		unsigned char c2 = '_';
+		unsigned char c3 = '.';
+		unsigned char c4 = '~';
 
 		// Keep alphanumeric and other accepted characters intact
-		if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~') 
+		if ( isalnum( c ) ||
+            c == c1 ||
+			c == c2 ||
+			c == c3 ||
+			c == c4 )
 		{
 			escaped << c;
 			continue;
@@ -151,3 +166,43 @@ std::string url_decode(std::string text)
 
 	return escaped.str();
 }
+
+char* AnsiToUtf8(const char* pszCode)
+{
+	int nLength = 0;
+	int nLength2 = 0;
+	BSTR bstrCode;
+	char* pszUTFCode = NULL;
+
+	nLength = MultiByteToWideChar(CP_ACP, 0, pszCode, strlen(pszCode), NULL, NULL);
+	bstrCode = SysAllocStringLen(NULL, nLength);
+	MultiByteToWideChar(CP_ACP, 0, pszCode, strlen(pszCode), bstrCode, nLength);
+
+	nLength2 = WideCharToMultiByte(CP_UTF8, 0, bstrCode, -1, pszUTFCode, 0, NULL, NULL);
+	pszUTFCode = (char*)malloc(nLength2 + 1);
+	WideCharToMultiByte(CP_UTF8, 0, bstrCode, -1, pszUTFCode, nLength2, NULL, NULL);
+
+	return pszUTFCode;
+}
+
+char* Utf8ToAnsi(const char* pszCode)
+{
+	BSTR bstrWide;
+	char* pszAnsi = NULL;
+	int nLength = 0;
+
+	nLength = MultiByteToWideChar(CP_UTF8, 0, pszCode, strlen(pszCode) + 1, NULL, NULL);
+	bstrWide = SysAllocStringLen(NULL, nLength);
+
+	MultiByteToWideChar(CP_UTF8, 0, pszCode, strlen(pszCode) + 1, bstrWide, nLength);
+
+	nLength = WideCharToMultiByte(CP_ACP, 0, bstrWide, -1, NULL, 0, NULL, NULL);
+	pszAnsi = new char[nLength];
+
+	WideCharToMultiByte(CP_ACP, 0, bstrWide, -1, pszAnsi, nLength, NULL, NULL);
+	SysFreeString(bstrWide);
+
+	return pszAnsi;
+}
+
+

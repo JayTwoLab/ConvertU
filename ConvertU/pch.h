@@ -11,6 +11,7 @@
 #include "framework.h"
 
 #include <wininet.h>
+#include <ctype.h>
 
 #include <cstddef>
 
@@ -30,8 +31,11 @@
 CString EncodeURL(CString url);
 CString DecodeURL(CString url);
 
-std::string url_encode(const std::string& value);
 char from_hex(char ch);
+std::string url_encode(const std::string& value);
 std::string url_decode(std::string text);
+
+char* AnsiToUtf8(const char* pszCode);
+char* Utf8ToAnsi(const char* pszCode);
 
 #endif //PCH_H
