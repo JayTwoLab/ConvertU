@@ -10,8 +10,9 @@
 // add headers that you want to pre-compile here
 #include "framework.h"
 
-#include <wininet.h>
 #include <ctype.h>
+#include <wininet.h>
+#include <winver.h>
 
 #include <cstddef>
 

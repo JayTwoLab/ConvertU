@@ -216,4 +216,3 @@ char* Utf8ToAnsi(const char* pszCode)
 	return pszAnsi;
 }
 
-

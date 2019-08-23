@@ -25,7 +25,10 @@ public:
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
-	protected:
+	CString m_strVersion;
+	
+protected:
+	virtual BOOL OnInitDialog();
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 // Implementation
@@ -42,13 +45,21 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 }
 
+BOOL CAboutDlg::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+	CString strTitle;
+	strTitle.Format(_T("ConvertU ver.%s"), m_strVersion );
+	GetDlgItem(IDC_STATIC_TITLE)->SetWindowText(strTitle);
+	
+	return TRUE;  // return TRUE  unless you set the focus to a control
+}
+
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
-
 // CConvertUDlg dialog
-
-
 
 CConvertUDlg::CConvertUDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_CONVERTU_DIALOG, pParent)
@@ -105,8 +116,6 @@ BOOL CConvertUDlg::OnInitDialog()
 
 	// TODO: Add extra initialization here
 
-
-
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -115,6 +124,7 @@ void CConvertUDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
 		CAboutDlg dlgAbout;
+		dlgAbout.m_strVersion = m_strVersion;
 		dlgAbout.DoModal();
 	}
 	else

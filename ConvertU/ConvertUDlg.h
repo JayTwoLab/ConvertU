@@ -17,9 +17,11 @@ public:
 	enum { IDD = IDD_CONVERTU_DIALOG };
 #endif
 
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
+public:
+	CString m_strVersion;
 
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 
 // Implementation
 protected:

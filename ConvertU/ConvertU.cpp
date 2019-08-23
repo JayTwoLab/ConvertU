@@ -38,8 +38,7 @@ CConvertUApp theApp;
 BOOL CConvertUApp::InitInstance()
 {
 	CWinApp::InitInstance();
-
-
+	
 	// Create the shell manager, in case the dialog contains
 	// any shell tree view or shell list view controls.
 	CShellManager *pShellManager = new CShellManager;
@@ -54,10 +53,14 @@ BOOL CConvertUApp::InitInstance()
 	// Change the registry key under which our settings are stored
 	// TODO: You should modify this string to be something appropriate
 	// such as the name of your company or organization
-	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
+	SetRegistryKey(_T("ConvertU Applications"));
+
+	GenVersion();
+	// TRACE(_T("VER : %s\n"), m_strVersion );
 
 	CConvertUDlg dlg;
 	m_pMainWnd = &dlg;
+	dlg.m_strVersion = m_strVersion;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
@@ -89,4 +92,46 @@ BOOL CConvertUApp::InitInstance()
 	//  application, rather than start the application's message pump.
 	return FALSE;
 }
+
+void CConvertUApp::GenVersion()
+{
+
+	HRSRC hRsrc = FindResource(NULL, MAKEINTRESOURCE(VS_VERSION_INFO), RT_VERSION);
+	if (hRsrc != NULL)
+	{
+		HGLOBAL hGlobalMemory = LoadResource(NULL, hRsrc);
+		if (hGlobalMemory != NULL)
+		{
+			CString rVersion;
+			LPVOID pVersionResouece = LockResource(hGlobalMemory);
+			LPVOID pVersion = NULL;
+			DWORD uLength, langD;
+			BOOL retVal;
+			LPCTSTR lpSubBlock = _T("\\VarFileInfo\\Translation");
+
+			retVal = VerQueryValue(pVersionResouece, lpSubBlock, (LPVOID*)& pVersion, (UINT*)& uLength);
+			if (retVal && uLength == 4) {
+				memcpy(&langD, pVersion, 4);
+				//ProductVersion <-> FileVersion
+				rVersion.Format(_T("\\StringFileInfo\\%02X%02X%02X%02X\\FileVersion"),
+					(langD & 0xff00) >> 8, langD & 0xff, (langD & 0xff000000) >> 24,
+					(langD & 0xff0000) >> 16);
+			}
+			else {
+				//ProductVersion <-> FileVersion
+				rVersion.Format(_T("\\StringFileInfo\\%04X04B0\\FileVersion"), GetUserDefaultLangID());
+			}
+			if (VerQueryValue(pVersionResouece, (LPCTSTR)rVersion, (LPVOID*)& pVersion, (UINT*)& uLength) != 0)
+			{
+				m_strVersion.Format(_T("%s"), (LPCTSTR)pVersion);
+			}
+		}
+
+		FreeResource(hGlobalMemory);
+	}
+
+
+}
+
+
 

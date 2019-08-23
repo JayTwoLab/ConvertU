@@ -27,6 +27,10 @@ public:
 // Implementation
 
 	DECLARE_MESSAGE_MAP()
+
+	void GenVersion();
+	CString m_strVersion;
+
 };
 
 extern CConvertUApp theApp;
