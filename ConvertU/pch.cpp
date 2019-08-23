@@ -23,7 +23,7 @@ CString EncodeURL(CString url)
 #endif
 
 	// 한글 인코딩
-	char* szHangul = AnsiToUtf8(srcString.c_str());
+	char* szHangul = AnsiToUtf8( srcString.c_str() );
 
 	// URL 인코딩 
 	std::string encodedString = url_encode( std::string(szHangul) );
@@ -63,11 +63,11 @@ CString DecodeURL(CString url)
 #endif
 
 	// URL 디코딩
-	std::string encodedString = url_decode(srcString);
+	std::string urlEncodedString = url_decode( srcString );
 
 	// 한글 디코딩
-	char* szHangul = Utf8ToAnsi( encodedString.c_str() );
-	encodedString = szHangul;
+	char* szHangul = Utf8ToAnsi( urlEncodedString.c_str() );
+	std::string encodedString = std::string(szHangul);
 
 #ifdef _UNICODE
 	{
@@ -152,6 +152,17 @@ std::string url_decode(std::string text)
 						i += 2;
 					}
 				}
+				else
+				{
+					// nx2 is end
+					escaped << '%';
+					// escaped << i[1];
+				}
+			}
+			else
+			{
+				// nx1 is end
+				escaped << '%';
 			}
 		}
 		else if (c == '+') 
