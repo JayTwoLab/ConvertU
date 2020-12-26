@@ -1,5 +1,7 @@
 # [ConvertU] UTF-8 과 URL 인코딩 동시 변환 유틸리티
 
+> This document is written in Korean.
+
 ![](https://gist.github.com/j2doll/419bb9f5d2e427478fcad72af15de784/raw/ee6f733db64c8ae374f36b1a4b91b0e45ce31950/convertu-shot.jpg)
 
 - **다운로드** [ConvertU.0.3.zip](https://gist.github.com/j2doll/419bb9f5d2e427478fcad72af15de784/raw/0a49f335b537557908e109429a4f9a0b68e750d6/ConvertU.0.3.zip)
