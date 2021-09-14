@@ -1,4 +1,4 @@
-# [ConvertU] UTF-8 과 URL 인코딩 동시 변환 유틸리티
+# :kr: [ConvertU] UTF-8 과 URL 인코딩 동시 변환 유틸리티
 
 > This document is written in Korean.
 
